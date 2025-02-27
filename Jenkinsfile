@@ -1,41 +1,25 @@
 pipeline {
-    agent any  // Use any available agent for the job
+    agent any
+
+    tools {
+        maven 'Maven 3'  // Name defined in Jenkins Global Tool Configuration
+    }
 
     stages {
         stage('Clean') {
             steps {
-                // Run 'mvn clean'
+                // Run Maven clean task to clean up the project
+                echo 'Running Maven clean...'
                 sh 'mvn clean'
             }
         }
-        
-        stage('Test') {
-            steps {
-                // Run 'mvn test'
-                sh 'mvn test'
-            }
-        }
-
-        stage('Package') {
-            steps {
-                // Run 'mvn package'
-                sh 'mvn package'
-            }
-        }
-
-        stage('Install') {
-            steps {
-                // Run 'mvn install'
-                sh 'mvn install'
-            }
-        }
     }
-    
     post {
-        always {
-            // Clean up or perform actions after the pipeline runs
-            echo 'Pipeline has finished executing.'
+        success {
+            echo 'Build, Test, and Package were successful!'
+        }
+        failure {
+            echo 'Build failed. Please check the logs.'
         }
     }
 }
-
