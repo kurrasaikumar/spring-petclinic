@@ -1,33 +1,41 @@
 pipeline {
-    agent any
-    
+    agent any  // Use any available agent for the job
+
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout the code from the repository
-                git 'https://github.com/kurrasaikumar/spring-petclinic.git'
-            }
-        }
-        
         stage('Clean') {
             steps {
-                // Clean the project using Maven
+                // Run 'mvn clean'
                 sh 'mvn clean'
             }
         }
-
+        
         stage('Test') {
             steps {
-                // Run tests using Maven
+                // Run 'mvn test'
                 sh 'mvn test'
             }
         }
 
         stage('Package') {
             steps {
-                // Package the project using Maven (creates the JAR/WAR file)
+                // Run 'mvn package'
                 sh 'mvn package'
             }
         }
+
+        stage('Install') {
+            steps {
+                // Run 'mvn install'
+                sh 'mvn install'
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Clean up or perform actions after the pipeline runs
+            echo 'Pipeline has finished executing.'
+        }
     }
 }
+
